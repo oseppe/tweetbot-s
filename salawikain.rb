@@ -1,14 +1,6 @@
-class Salawikain
+require 'csv'
 
-  WORDS = {
-      noun: [
-        "aso", "ate", "Diyos", "kuya", "pusa", "tao"
-      ],
-    
-      noun_action: [
-        "alala", "awa", "gawa"
-      ]
-    }
+class Salawikain
 
   # yeah it's bad style to use a non-english word but it's funny
   # whenever i type this method
@@ -36,7 +28,21 @@ class Salawikain
   end
 
   def get_structure
-    "Nasa <noun> ang <noun_action> , nasa <noun> ang <noun_action> ."
+    structures = read_file "structure"
+
+    structures[rand(structures.count)]    
+  end
+
+  def read_file file_name
+    file = "words/" + file_name + ".csv"
+
+    words = []
+
+    CSV.foreach(file) do |word|
+      words.push word[0]
+    end
+
+    words
   end
 
   def replace word
@@ -44,7 +50,7 @@ class Salawikain
     # remove the angle brackets
     type = word[1...-1]
 
-    choices = WORDS[type.to_sym]
+    choices = read_file type
 
     choices[rand(choices.count)]
   end
